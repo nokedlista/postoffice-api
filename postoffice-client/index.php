@@ -10,4 +10,3 @@ PageCounties::nav();
 Request::handle();
 PageCounties::footer();
 
-Request::handle();

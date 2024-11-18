@@ -13,6 +13,7 @@ class Request
                 self::postRequest();
                 break;
             case "GET": 
+                //self::getRequest();
             default:
                 // self::getRequest();
                 break;
