@@ -1,19 +1,20 @@
 <?php
+
 namespace App\Html;
 
 use App\RestApiClient\Client;
 use App\Database\DB;
+use Exception;
 
 class Request
 {
-    static function handle() 
+    static function handle()
     {
-        switch($_SERVER['REQUEST_METHOD'])
-        {
-            case "POST": 
+        switch ($_SERVER['REQUEST_METHOD']) {
+            case "POST":
                 self::postRequest();
                 break;
-            case "GET": 
+            case "GET":
                 //self::getRequest();
             default:
                 // self::getRequest();
@@ -24,8 +25,7 @@ class Request
     static function postRequest()
     {
         $request = $_REQUEST;
-        switch($request)
-        {
+        switch ($request) {
             case isset($request['btn-counties']):
                 PageCounties::table(self::getCounties());
                 break;
@@ -33,12 +33,18 @@ class Request
                 self::delCounty($_POST['btn-del-county']);
                 break;
             case isset($request['btn-edit-county']):
-                echo "anyad";
-                var_dump($_POST);
-                die;
-                self::modCounty($_POST['btn-edit-county']);
+                $countyData = self::GetCounty($_POST['btn-edit-county']);
+                PageCounties::editCounty($countyData['name'], $countyData['id']);
                 break;
-
+            case isset($request['btn-save-county']):
+                self::editCounty($_POST['id'], $_POST['name']);
+                break;
+            case isset($request['btn-add']):
+                PageCounties::addCounty(false);
+                break;
+            case isset($request['btn-add-county']):
+                self::addCounty($_POST['id'], $_POST['name']);
+                break;
         }
     }
 
@@ -54,7 +60,6 @@ class Request
     {
         $client = new Client();
         $response = $client->get("counties/{$id}");
-
         return $response['data'];
     }
 
@@ -65,11 +70,21 @@ class Request
         $Db->mysqli->query($query);
     }
 
-    static function modCounty($id)
+    static function editCounty($id, $name)
     {
-        $name = self::getCounty($id);
-        var_dump($name);
-        die;
-        PageCounties::modName($name['name']);
+        $query = "UPDATE counties SET name = '{$name}', id = {$id} WHERE id = {$id}";
+        $Db = new DB();
+        $Db->mysqli->query($query);
+    }
+
+    static function addCounty($id, $name)
+    {
+        $query = "INSERT INTO counties (id, name) VALUES ({$id}, '{$name}')";
+        $Db = new DB();
+        try {
+            $Db->mysqli->query($query);
+        } catch (Exception) {
+            PageCounties::addCounty(true);
+        }
     }
 }
