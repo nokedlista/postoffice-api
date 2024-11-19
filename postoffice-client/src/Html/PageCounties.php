@@ -52,8 +52,6 @@ class PageCounties extends AbstractPage
 
     static function tableBody(array $entities)
     {
-        echo "anyad";
-        var_dump($entities);
         echo "<tbody>";
         $i = 0;
         foreach ($entities as $entity){
@@ -63,18 +61,22 @@ class PageCounties extends AbstractPage
                 <td>{$entity['id']}</td>
                 <td>{$entity['name']}</td>
                 <td class='flex float-right'>
-                    <button type='button'
-                        id='btn-edit-{$entity['id']}'
-                        onclick='$onClick'
-                        title='Módosít'>
-                        <i class='fa fa-edit'></i>
-                    </button>
                     <form method='post' action=''>
-                        <button type='submit'>
-                            id='btn-del-conty-{$entity['id']}
+                        <button type='button'
+                            id='btn-edit-{$entity['id']}'
+                            name='btn-edit-county'
+                            value='{$entity['id']}'
+                            title='Módosít'>
+                            Módosít
+                            <i class='fa fa-edit'></i>
+                        </button>
+                    </form>
+                    <form method='post' action=''>
+                        <button type='submit'
+                            id='btn-del-county-{$entity["id"]}'
                             name='btn-del-county'
                             value='{$entity['id']}'
-                            title='Töröl'
+                            title='Töröl'>Töröl
                             <i class='fa fa-trash'></i>
                         </button>
                     </form>
@@ -82,5 +84,23 @@ class PageCounties extends AbstractPage
                 </td>
             </tr>";
         }
+    }
+
+    static function modName($name)
+    {
+        echo "
+        <td class='flex float-right'>
+                    <form method='post' action=''>
+                        <input type='text' name='mod' value='{$name}'>
+                        <button type='button'
+                            id='btn-edit'
+                            name='btn-edit-county-submit'
+                            value=''
+                            title='Módosít'>
+                            Módosít
+                            <i class='fa fa-edit'></i>
+                        </button>
+                    </form>
+        ";
     }
 }

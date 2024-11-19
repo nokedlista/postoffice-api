@@ -5,17 +5,23 @@ use App\Interfaces\PageInterface;
 
 abstract class AbstractPage implements PageInterface 
 {
-    static function head() 
+    static function head()
     {
         echo '
         <!doctype html>
-        <html land="hu-hu">
+        <html lang="hu-hu">
         <head>
-            <meta carset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1>
+            <meta charset="utf-8">
+            <meta name="viewport"
+                content="width=device-width, initial-scale=1">
+ 
             <title>REST API ügyfél</title>
-        </head>
-        ';
+ 
+            <!--Scripts-->
+            <script src="js/js.js" type="text/javascript"></script>
+            <script src="js/app.js" type="text/javascript"></script>
+ 
+        </head>';
     }
 
     static function nav() 

@@ -6,7 +6,7 @@ use Exception;
 
 class Client //implements ClientInterface 
 {
-    const API_URL = "http://localhost:8000";
+    const API_URL = "http://localhost:8000/";
     /**
      * The whole url including host, api uri ang jql query.
      * @var string
@@ -30,7 +30,7 @@ class Client //implements ClientInterface
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl,
             CURLOPT_HTTPHEADER,
-            array('Contetn-Type: applicaton/json')
+            array('Content-Type: application/json')
         );
         $response = curl_exec($curl);
         if(!$response) {

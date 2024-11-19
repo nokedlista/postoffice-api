@@ -7,7 +7,7 @@ class DB
     const USER = 'root';
     const PASSWORD = null;
     const DATABASE = 'postoffice';
-    protected $mysqli;
+    public $mysqli;
     function __construct(
         $host = self::HOST, 
         $user = self::USER, 
