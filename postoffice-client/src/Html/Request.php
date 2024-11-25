@@ -14,8 +14,6 @@ class Request
             case "POST":
                 self::postRequest();
                 break;
-            case "GET":
-                //self::getRequest();
             default:
                 // self::getRequest();
                 break;
@@ -44,6 +42,9 @@ class Request
                 break;
             case isset($request['btn-add-county']):
                 self::addCounty($_POST['id'], $_POST['name']);
+                break;
+            case isset($request['btn-edit-cancel']):
+                PageCounties::table(self::getCounties());
                 break;
         }
     }

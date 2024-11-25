@@ -48,15 +48,14 @@ class PageCounties extends AbstractPage
                             name='btn-edit-county'
                             value='{$entity['id']}'
                             title='Módosít'>
-                            Módosít
                             <i class='fa fa-edit'></i>
                         </button> </br>
                         <button type='submit'
                             id='btn-del-county-{$entity["id"]}'
                             name='btn-del-county'
                             value='{$entity['id']}'
-                            title='Töröl'>Töröl
-                            <i class='fa fa-trash'></i>
+                            title='Töröl'>
+                            <i class='fa fa-trash' style='color: red'></i>
                         </button>
                     </form>
 
@@ -70,11 +69,15 @@ class PageCounties extends AbstractPage
         echo "
                 <th>&nbsp;</th>
                 <th>
-                    <form name='county-editor' method='post' action=''>
+                    <form method='post' action=''>
                         <input type='hidden' id='id' name='id' value='{$id}'>
                         <input type='search' id='name' name='name' placeholder='{$name}' required>
+                        </br>
                         <button type='submit' id='id-save-county' name='btn-save-county' title='Ment'>Mentés</button>
-                        <button type='button' id='btn-cancel-county' title='Mégese'>Mégse</button>
+                        
+                    </form>
+                    <form method='post'>
+                        <button type='submit' id='btn-cancel-county' name='btn-edit-cancel'>Mégse</button>
                     </form>
                 </th>
         ";

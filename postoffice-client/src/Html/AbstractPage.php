@@ -12,11 +12,10 @@ abstract class AbstractPage implements PageInterface
         <html lang="hu-hu">
         <head>
             <meta charset="utf-8">
-            <meta name="viewport"
-                content="width=device-width, initial-scale=1">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
  
             <title>REST API ügyfél</title>
- 
+            <link rel="stylesheet" href="fontawesome\css\all.css">
             <!--Scripts-->
             <script src="js/js.js" type="text/javascript"></script>
             <script src="js/app.js" type="text/javascript"></script>
