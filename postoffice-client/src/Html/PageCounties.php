@@ -73,7 +73,7 @@ class PageCounties extends AbstractPage
                         <input type='hidden' id='id' name='id' value='{$id}'>
                         <input type='search' id='name' name='name' placeholder='{$name}' required>
                         </br>
-                        <button type='submit' id='id-save-county' name='btn-save-county' title='Ment'>Mentés</button>
+                        <button type='submit' id='id-save-county' name='btn-save-county'>Mentés</button>
                         
                     </form>
                     <form method='post'>
@@ -83,19 +83,15 @@ class PageCounties extends AbstractPage
         ";
     }
 
-    static function addCounty($hibae)
+    static function addCounty()
     {
-        if ($hibae) {
-            echo "Ilyen id-jű megye már van!";
-        }
         echo "
                 <th>&nbsp;</th>
                 <th>
                     <form name='county-editor' method='post' action=''>
-                        <input type='search' id='id' name='id' placeholder='A megye id-je' required>
-                        <input type='search' id='name' name='name' placeholder='A megye neve' required>
+                        <input type='search' id='name' name='name' placeholder='A megye neve'>
                         <button type='submit' id='btn-add-county' name='btn-add-county' title='Ment'>Mentés</button>
-                        <button type='button' id='btn-cancel-county' title='Mégese'>Mégse</button>
+                        <button type='submit' id='btn-cancel-edit' title='Mégese'>Mégse</button>
                     </form>
                 </th>
 

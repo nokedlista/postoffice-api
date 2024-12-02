@@ -38,12 +38,12 @@ class Request
                 self::editCounty($_POST['id'], $_POST['name']);
                 break;
             case isset($request['btn-add']):
-                PageCounties::addCounty(false);
+                PageCounties::addCounty();
                 break;
             case isset($request['btn-add-county']):
-                self::addCounty($_POST['id'], $_POST['name']);
+                self::addCounty($_POST['name']);
                 break;
-            case isset($request['btn-edit-cancel']):
+            case isset($request['btn-cancel-edit']):
                 PageCounties::table(self::getCounties());
                 break;
         }
@@ -66,26 +66,22 @@ class Request
 
     static function delCounty($id)
     {
-        $query = "DELETE FROM counties WHERE id={$id}";
-        $Db = new DB();
-        $Db->mysqli->query($query);
+        $client = new Client();
+        $response = $client->delete("counties", $id);
+        return $response['data'];  
     }
 
     static function editCounty($id, $name)
     {
-        $query = "UPDATE counties SET name = '{$name}', id = {$id} WHERE id = {$id}";
-        $Db = new DB();
-        $Db->mysqli->query($query);
+        $client = new Client();
+        $response = $client->update("counties", $id, ["name"=> $name]);
+        return $response['data'];
     }
 
-    static function addCounty($id, $name)
+    static function addCounty($name)
     {
-        $query = "INSERT INTO counties (id, name) VALUES ({$id}, '{$name}')";
-        $Db = new DB();
-        try {
-            $Db->mysqli->query($query);
-        } catch (Exception) {
-            PageCounties::addCounty(true);
-        }
+        $client = new Client();
+        $response = $client->post("counties", ['name' => $name]);
+        return $response['data'];
     }
 }
