@@ -53,7 +53,6 @@ class Request
     {
         $client = new Client();
         $response = $client->getCounty('counties');
-
         return $response['data'];
     }
 
