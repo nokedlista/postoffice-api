@@ -52,7 +52,7 @@ class Request
     static function getCounties()
     {
         $client = new Client();
-        $response = $client->get('counties');
+        $response = $client->getCounty('counties');
 
         return $response['data'];
     }
@@ -60,28 +60,28 @@ class Request
     static function getCounty($id)
     {
         $client = new Client();
-        $response = $client->get("counties/{$id}");
+        $response = $client->getCounty("counties/{$id}");
         return $response['data'];
     }
 
     static function delCounty($id)
     {
         $client = new Client();
-        $response = $client->delete("counties", $id);
+        $response = $client->deleteCounty("counties", $id);
         return $response['data'];  
     }
 
     static function editCounty($id, $name)
     {
         $client = new Client();
-        $response = $client->update("counties", $id, ["name"=> $name]);
+        $response = $client->updateCounty("counties", $id, ["name"=> $name]);
         return $response['data'];
     }
 
     static function addCounty($name)
     {
         $client = new Client();
-        $response = $client->post("counties", ['name' => $name]);
+        $response = $client->addCounty("counties", ['name' => $name]);
         return $response['data'];
     }
 }

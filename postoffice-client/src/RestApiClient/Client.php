@@ -22,7 +22,7 @@ class Client //implements ClientInterface
         return $this->url;
     }
 
-    function get($route)
+    function getCounty($route)
     {
         $url = $this->getUrl() . $route;
         $curl = curl_init();
@@ -41,7 +41,7 @@ class Client //implements ClientInterface
         return json_decode($response, TRUE);
     }
 
-    function post($url, array $data = [])
+    function addCounty($url, array $data = [])
     {
         $json = json_encode($data);
         $curl = curl_init();
@@ -67,7 +67,7 @@ class Client //implements ClientInterface
         return json_decode($response, TRUE);
     }
 
-    function delete($url, $id) {
+    function deleteCounty($url, $id) {
         $json = json_encode(['id' => $id]);
         $curl  = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -87,7 +87,7 @@ class Client //implements ClientInterface
         return json_decode($response, TRUE);
     }
 
-    function update($url, $id, $data)
+    function updateCounty($url, $id, $data)
     {
         $json = json_encode($data);
         $curl = curl_init();
