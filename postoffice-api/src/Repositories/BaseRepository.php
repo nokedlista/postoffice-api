@@ -14,7 +14,7 @@ class BaseRepository extends DB // implements DBInterface
      * @return void
      */
     public function create(array $data): ?int
-    {        
+    {
         $fields = '';
         $values = '';
         foreach ($data as $field => $value) {
@@ -64,8 +64,16 @@ class BaseRepository extends DB // implements DBInterface
             ->query($query)->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getAllCities(): array
+    {
+        $query = $this->select() . "ORDER BY city";
+
+        return $this->mysqli
+            ->query($query)->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function update(int $id, array $data)
-    {        
+    {
         $set = '';
         foreach ($data as $field => $value) {
             if ($set > '') {
@@ -95,12 +103,12 @@ class BaseRepository extends DB // implements DBInterface
         return $this->mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
     }
 
-//    public function truncate()
-//    {
-//        $query = "TRUNCATE TABLE makers;";
-//
-//        return $this->mysqli->query($query);
-//    }
+    //    public function truncate()
+    //    {
+    //        $query = "TRUNCATE TABLE makers;";
+    //
+    //        return $this->mysqli->query($query);
+    //    }
 
     public function getCount()
     {

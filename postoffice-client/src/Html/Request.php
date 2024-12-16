@@ -27,6 +27,9 @@ class Request
             case isset($request['btn-counties']):
                 PageCounties::table(self::getCounties());
                 break;
+            case isset($request['btn-cities']):
+                PageCities::table(self::getCounties());
+                break;
             case isset($request['btn-del-county']):
                 self::delCounty($_POST['btn-del-county']);
                 break;
@@ -46,6 +49,9 @@ class Request
             case isset($request['btn-cancel-edit']):
                 PageCounties::table(self::getCounties());
                 break;
+            case isset($request['btn-select-county']):
+                $abc = self::getAbcByCities($_POST['dropdown']);
+                PageCities::AbcButtons($abc);
         }
     }
 
@@ -63,18 +69,29 @@ class Request
         return $response['data'];
     }
 
+    static function getCountyByName($county)
+    {
+        $client = new Client();
+        $response = $client->getCounty("counties");
+        $datas = $response['data'];
+        foreach ($datas as $data) {
+            if ($data['name'] == $county) {
+                $id = $data['id'];
+            }
+        }
+        return $id;
+    }
+
     static function delCounty($id)
     {
         $client = new Client();
-        $response = $client->deleteCounty("counties", $id);
-        return $response['data'];  
+        $client->deleteCounty("counties", $id);
     }
 
     static function editCounty($id, $name)
     {
         $client = new Client();
-        $response = $client->updateCounty("counties", $id, ["name"=> $name]);
-        var_dump($response['data']);
+        $response = $client->updateCounty("counties", $id, ["name" => $name]);
         return $response['data'];
     }
 
@@ -83,5 +100,27 @@ class Request
         $client = new Client();
         $response = $client->addCounty("counties", ['name' => $name]);
         return $response['data'];
+    }
+
+    static function getABCbyCities($county)
+    {
+        $client = new Client();
+        $data = $client->getCities("cities");
+        $cities = [];
+        $id = self::getCountyByName($county);
+        foreach ($data['data'] as $array) {
+            if ($array['id_county'] == $id) {
+
+                $cities += $array;
+            }
+        }
+        $abc = [];
+        foreach ($cities as $city) {
+            $ch = strtoupper($city['city'][0]);
+            if (!in_array($ch, $abc)) {
+                $abc[] = $ch;
+            }
+        }
+        return $abc;
     }
 }

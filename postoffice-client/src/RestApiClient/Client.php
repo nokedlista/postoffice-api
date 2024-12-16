@@ -1,4 +1,5 @@
 <?php
+
 namespace App\RestApiClient;
 
 use App\Interfaces\ClientInterface;
@@ -13,12 +14,13 @@ class Client //implements ClientInterface
      */
     protected $url;
 
-    function __construct($url = self::API_URL) 
+    function __construct($url = self::API_URL)
     {
         $this->url = $url;
     }
 
-    public function getUrl() {
+    public function getUrl()
+    {
         return $this->url;
     }
 
@@ -28,12 +30,13 @@ class Client //implements ClientInterface
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl,
+        curl_setopt(
+            $curl,
             CURLOPT_HTTPHEADER,
             array('Content-Type: application/json')
         );
         $response = curl_exec($curl);
-        if(!$response) {
+        if (!$response) {
             trigger_error(curl_error($curl));
         }
         curl_close($curl);
@@ -41,9 +44,29 @@ class Client //implements ClientInterface
         return json_decode($response, TRUE);
     }
 
-    function addCounty($url, array $data = [])
+    function getCities($route)
     {
-        $json = json_encode($data);
+        $url = $this->getUrl() . $route;
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt(
+            $curl,
+            CURLOPT_HTTPHEADER,
+            array('Content-Type: application/json')
+        );
+        $response = curl_exec($curl);
+        if (!$response) {
+            trigger_error(curl_error($curl));
+        }
+        curl_close($curl);
+
+        return json_decode($response, TRUE);
+    }
+
+    function addCounty($url, array $name = [])
+    {
+        $json = json_encode($name);
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_URL, $this->url . $url);
@@ -58,8 +81,7 @@ class Client //implements ClientInterface
         curl_setopt($curl, CURLOPT_POST, TRUE);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
         $response = curl_exec($curl);
-        if(!$response)
-        {
+        if (!$response) {
             trigger_error(curl_error($curl));
         }
         curl_close($curl);
@@ -67,7 +89,8 @@ class Client //implements ClientInterface
         return json_decode($response, TRUE);
     }
 
-    function deleteCounty($url, $id) {
+    function deleteCounty($url, $id)
+    {
         $json = json_encode(['id' => $id]);
         $curl  = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -76,24 +99,23 @@ class Client //implements ClientInterface
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
         curl_setopt($curl, CURLOPT_POSTFIELDS,  $json);
         $response = curl_exec($curl);
-        var_dump($response);
-        if(!$response) {
+        if (!$response) {
             $error = curl_error($curl);
-            if($error) {
+            if ($error) {
                 trigger_error($error);
             }
         }
         curl_close($curl);
- 
+
         return json_decode($response, TRUE);
     }
 
-    function updateCounty($url, $id, $data)
+    function updateCounty($url, $id, $name)
     {
-        $json = json_encode($data);
+        $json = json_encode($name);
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl, CURLOPT_URL, $this->url . $url);
+        curl_setopt($curl, CURLOPT_URL, $this->url . $url . '/' . $id);
         curl_setopt(
             $curl,
             CURLOPT_HTTPHEADER,
@@ -105,11 +127,9 @@ class Client //implements ClientInterface
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
         $response = curl_exec($curl);
-        if(!$response)
-        {
+        if (!$response) {
             $error = curl_error($curl);
-            if($error)
-            {
+            if ($error) {
                 trigger_error($error);
             }
         }
@@ -117,7 +137,4 @@ class Client //implements ClientInterface
 
         return json_decode($response, TRUE);
     }
-    
-
-    
 }

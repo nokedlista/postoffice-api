@@ -3,13 +3,15 @@
 namespace App\Html;
 
 use App\Repositories\CountyRepository;
+use App\Repositories\CityRepository;
+
 
 class Request
 {
 
     static function handle()
     {
-        switch ($_SERVER["REQUEST_METHOD"]){
+        switch ($_SERVER["REQUEST_METHOD"]) {
             case "POST":
                 self::postRequest();
                 break;
@@ -37,6 +39,15 @@ class Request
                 $data = self::getRequestData();
                 if (isset($data['name'])) {
                     $repository = new CountyRepository();
+                    $newId = $repository->create($data);
+                    $code = 201;
+                }
+                Response::response(['id' => $newId], $code);
+                break;
+            case 'cities':
+                $data = self::getRequestData();
+                if (isset($data['name'])) {
+                    $repository = new CityRepository();
                     $newId = $repository->create($data);
                     $code = 201;
                 }
@@ -79,7 +90,7 @@ class Request
      *          "status":404
      *      }
      */
-    
+
     private static function getRequest()
     {
         $resourceName = self::getResourceName();
@@ -94,13 +105,29 @@ class Request
                     break;
                 }
 
-                $entities = $repository->getAll();                
+                $entities = $repository->getAll();
                 if (empty($entities)) {
                     $code = 404;
                 }
                 Response::response($entities, $code);
                 break;
-                
+
+            case 'cities':
+                $repository = new CityRepository();
+                $resourceId = self::getResourceId();
+                $code = 200;
+                if ($resourceId) {
+                    $entity = $repository->find($resourceId);
+                    Response::response($entity, $code);
+                    break;
+                }
+
+                $entities = $repository->getAllCities();
+                if (empty($entities)) {
+                    $code = 404;
+                }
+                Response::response($entities, $code);
+                break;
             case 'filters':
                 $filterData = self::getFilterData();
                 $data = self::getRequestData();
@@ -197,6 +224,15 @@ class Request
                 }
                 Response::response([], $code);
                 break;
+            case 'cities':
+                $code = 404;
+                $repository = new CityRepository();
+                $result = $repository->delete($id);
+                if ($result) {
+                    $code = 204;
+                }
+                Response::response([], $code);
+                break;
             default:
                 Response::response([], 404, $_SERVER['REQUEST_URI'] . " not found");
         }
@@ -226,6 +262,19 @@ class Request
                 }
                 Response::response([], $code);
                 break;
+            case 'cities':
+                $id = self::getResourceId(); // $putRequestData['id'];
+                $repository = new CityRepository();
+                $entity = $repository->find($id);
+                $code = 404;
+                if ($entity) {
+                    $result = $repository->update($id, ['name' => $putRequestData['name']]);
+                    if ($result) {
+                        $code = 202;
+                    }
+                }
+                Response::response([], $code);
+                break;
             default:
                 Response::response([], 404, "$uri not found");
         }
@@ -235,7 +284,7 @@ class Request
     {
         return explode("/", $requestUri) ?? null;
     }
- 
+
     private static function getResourceName(): string
     {
         $arrUri = self::getArrUri($_SERVER['REQUEST_URI']);
@@ -245,7 +294,6 @@ class Request
         }
 
         return $result;
-
     }
 
     private static function getResourceId(): int
