@@ -74,6 +74,7 @@ class Request
     {
         $client = new Client();
         $response = $client->updateCounty("counties", $id, ["name"=> $name]);
+        var_dump($response['data']);
         return $response['data'];
     }
 

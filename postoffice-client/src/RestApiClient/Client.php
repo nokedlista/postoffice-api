@@ -76,6 +76,7 @@ class Client //implements ClientInterface
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
         curl_setopt($curl, CURLOPT_POSTFIELDS,  $json);
         $response = curl_exec($curl);
+        var_dump($response);
         if(!$response) {
             $error = curl_error($curl);
             if($error) {
